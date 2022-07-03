@@ -9,11 +9,19 @@ RSpec.describe WeatherTwitter::WeatherMap do
       stub_get('/data/2.5/forecast').with(query: {id: city_id, units: "metric", lang: "pt", appid: app_id}).to_return(body: fixture('natal.json'))
     end
 
+    it "correct's city name" do
+      weather_map = WeatherTwitter::WeatherMap.new(app_id)
+      result = weather_map.take_city_weather(city_id)
+      expect(a_get('/data/2.5/forecast').with(query: {id: city_id, units: "metric", lang: "pt", appid: app_id})).to have_been_made
+      expect(result[:city]).to eq "Natal"
+    end
+
+
     it "call correct url" do
       weather_map = WeatherTwitter::WeatherMap.new(app_id)
       result = weather_map.take_city_weather(city_id)
       expect(a_get('/data/2.5/forecast').with(query: {id: city_id, units: "metric", lang: "pt", appid: app_id})).to have_been_made
-      expect(result[:code]).to be 200
+      expect(result[:code]).to eq 200
     end
 
     it "get correct informations" do
@@ -74,13 +82,20 @@ RSpec.describe WeatherTwitter::WeatherMap do
       weather_map = WeatherTwitter::WeatherMap.new(app_id)
       result = weather_map.take_city_weather(city_id)
       expect(a_get('/data/2.5/forecast').with(query: {id: city_id, units: "metric", lang: "pt", appid: app_id})).to have_been_made
-      expect(result[:code]).to be 404
+      expect(result[:code]).to eq 404
     end
 
     it "get empyt informations" do
       weather_map = WeatherTwitter::WeatherMap.new(app_id)
       result = weather_map.take_city_weather(city_id)
       expect(result[:weathers]).to be_empty
+    end
+
+    it "no have city name" do
+      weather_map = WeatherTwitter::WeatherMap.new(app_id)
+      result = weather_map.take_city_weather(city_id)
+      expect(a_get('/data/2.5/forecast').with(query: {id: city_id, units: "metric", lang: "pt", appid: app_id})).to have_been_made
+      expect(result[:city]).to eq ""
     end
   end
 end

@@ -19,17 +19,23 @@ module WeatherTwitter
       if infos["cod"] == "200"
         {
           code: 200,
+          city: city_name(infos),
           weathers: filter_weather_infos(infos),
         }
       else
         {
           code: infos["cod"].to_i,
+          city: "",
           weathers: [],
         }
       end
     end
 
     private
+
+    def city_name(infos)
+      infos["city"]["name"]
+    end
 
     def filter_weather_infos(infos)
       infos["list"].map do |info|
