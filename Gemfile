@@ -7,6 +7,8 @@ gemspec
 
 gem 'rest-client', '~> 2.1'
 gem "rake", "~> 13.0"
+gem 'twitter', '~> 7.0'
+
 group :development do
   gem "pry"
 end
