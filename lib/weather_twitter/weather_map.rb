@@ -13,8 +13,14 @@ module WeatherTwitter
 
     def take_city_weather(city_id)
       url = "#{BASE_URL}/data/2.5/forecast?id=#{city_id}&units=metric&lang=pt&appid=#{@app_id}"
-      result = RestClient.get(url)
-      infos = JSON.parse(result.body)
+      begin
+        result = RestClient.get(url)
+        infos = JSON.parse(result.body)
+      rescue => e
+        infos = {
+          "cod" => "404"
+        }
+      end
       if infos["cod"] == "200"
         {
           code: 200,
